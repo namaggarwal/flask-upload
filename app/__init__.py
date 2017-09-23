@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from views import pages
 
 
@@ -19,3 +19,9 @@ app.secret_key = app.config["FLASK_SECRET_KEY"]
 
 ### Blueprints Configuration ###
 app.register_blueprint(pages)
+
+
+
+@app.errorhandler(500)
+def error(e):
+    return render_template('error.html'), 500

@@ -1,14 +1,125 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Mastercard Style Guide - Upload{% endblock %}
+{% block links %}
+<style type="text/css">
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+.btnUpload{
+
+  margin-top: 16px;
+}
+
+#error{
+  display: none;
+}
+</style>
+{% endblock %}
 {% block content %}
+  <div id="uploadModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Uploading File</h4>
+        </div>
+        <div class="modal-body">
+          <p>Your file is being uploaded</p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="jumbotron">
-    <h2>Flask Application</h2>
+    <h2>Mastercard Style Guide - Upload Build</h2>
   </div>
   <div class="buttonCont" style="text-align:center;margin-top:10%">
-      <form method=POST enctype=multipart/form-data action="{{ url_for('pages.upload') }}">
-        <input type=file name=build>
-        <input type=submit value=Upload>        
+      <form id="frmUpload" method="POST" enctype="multipart/form-data" action="{{ url_for('pages.upload') }}">        
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div id="error" class="alert alert-danger" role="alert">
+            </div>
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip; <input name="build" id="build" type="file" style="display: none;">
+                    </span>
+                </label>
+                <input id="fileText" type="text" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 btnUpload">  
+          <button id="upload" type="button" class="btn btn-default">Upload</button>
+        </div>
+        <div class="col-md-4"></div> 
+      </div>         
       </form>
   </div>
+
+  <script type="text/javascript">
+
+    let fileInput;
+    let fileText;
+    const fileName = "{{ config.FILE_NAME }}";
+    let error;
+    let form;
+    let upload;
+
+    function attachEvents(){
+      fileInput = document.getElementById("build");
+      fileText = document.getElementById("fileText");
+      error    = document.getElementById("error");
+      form     = document.getElementById("frmUpload");
+      upload   = document.getElementById("upload");
+
+      fileInput.addEventListener("change",onFileChange);
+      upload.addEventListener("click",onUploadButtonClick);
+    }
+
+    function onFileChange(e){
+      if(this.files && this.files.length == 1){
+        if(this.files[0].name != fileName){
+          error.innerHTML = "Only "+fileName+" can be uploaded!";
+          error.style.display = "block";
+        }else{
+          fileText.value = this.files[0].name;
+          error.style.display = "none";
+        }
+      }else{
+        fileText.value = ""; 
+      }
+    }
+
+    function onUploadButtonClick(){
+
+      if(fileInput.files && fileInput.files.length == 1 && fileInput.files[0].name == fileName){
+        $("#uploadModal").modal('show');
+        form.submit();
+      }
+    }
+
+    (function(){
+      attachEvents();
+    })();
+  </script>
 
 {% endblock %}

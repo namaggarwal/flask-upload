@@ -20,9 +20,10 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
         bObj = Build()
         bObj.build(app.config["UPLOAD_FOLDER"],app.config['UNZIP_FOLDER'],app.config["FILE_NAME"])
-    return render_template("home.html")
-
+    return render_template("success.html")
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
