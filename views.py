@@ -17,7 +17,7 @@ def upload():
     file = request.files['build']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], app.config['UNZIP_FOLDER'],filename))
         bObj = Build()
         bObj.build(app.config["UPLOAD_FOLDER"],app.config["FILE_NAME"])
     return render_template("home.html")
