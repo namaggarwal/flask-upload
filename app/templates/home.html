@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+  <div class="jumbotron">
+    <h2>Flask Application</h2>
+  </div>
+  <div class="buttonCont" style="text-align:center;margin-top:10%">
+      <form method=POST enctype=multipart/form-data action="{{ url_for('pages.upload') }}">
+        <input type=file name=build>
+        <input type=submit value=Upload>        
+      </form>
+  </div>
+
+{% endblock %}
